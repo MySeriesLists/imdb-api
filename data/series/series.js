@@ -1,6 +1,8 @@
 const fs = require("fs").promises;
 const BASE_URL = "http://localhost:3000/title/";
 const axios = require("axios");
+const seriesInfoPath = "../datasets/series/seriesInfo.json";
+const seriesListPath = "../datasets/series/seriesList.json";
 
 async function wait(time) {
   return new Promise((resolve) => {
@@ -9,23 +11,26 @@ async function wait(time) {
 }
 
 async function getSeries() {
-  var allreadyAdded = [];
-  const addedSeries = await fs.readFile("./seriesAdded.csv", "utf8");
-  addedSeries.split("\n").forEach((element) => {
-    allreadyAdded.push(element);
-  });
-  allreadyAdded === undefined
-    ? (allreadyAdded = [])
-    : (allreadyAdded = allreadyAdded);
-  const seriesList = await fs.readFile("./seriesList.json", "utf8");
+  //verfiy if seriesList exists (if not, create it with [] value)
+  try {
+    await fs.access(seriesInfoPath);
+  } catch (err) {
+    await fs.writeFile(seriesInfoPath, "[]");
+  }
+
+  const seriesList = await fs.readFile(seriesListPath, "utf8");
   const series = JSON.parse(seriesList);
+
+  var seriesInfo = await fs.readFile(seriesInfoPath, "utf8");
+  seriesInfo = JSON.parse(seriesInfo);
+  var allreadyAdded = seriesInfo.map((serie) => serie.imdbId);
 
   var count = 0;
   const seriesLength = series.length;
   console.log("Series length: " + seriesLength);
+  console.log("Series already added: " + allreadyAdded.length);
 
   for (const serie of series) {
-
     count++;
     if (allreadyAdded.includes(serie.imdbId)) {
       const currentDate = new Date().getTime();
@@ -42,7 +47,7 @@ async function getSeries() {
     const url = BASE_URL + serie.imdbId;
 
     try {
-      var seriesInfo = await fs.readFile("./seriesInfo.json", "utf8");
+      //var seriesInfo = await fs.readFile("./seriesInfo.json", "utf8");
 
       seriesInfo.length === 0
         ? (seriesInfo = [])
@@ -57,7 +62,7 @@ async function getSeries() {
       data.trailerYtId = serie.trailerYtId || null;
       //}
       const index = seriesInfo.findIndex(
-        (element) => element.id == serie.imdbId
+        (element) => element.imdbId == serie.imdbId
       );
       // to avoid duplicates in the file remove the old id if it exists and add the new one
       if (index !== -1) {
@@ -65,13 +70,13 @@ async function getSeries() {
       }
 
       seriesInfo.push(data);
-      await fs.writeFile("./seriesInfo.json", JSON.stringify(seriesInfo));
+      await fs.writeFile(seriesInfoPath, JSON.stringify(seriesInfo));
 
       // add the serie to the list of added series and write it to the csv file
 
       if (!allreadyAdded.includes(serie.imdbId)) {
         allreadyAdded.push(serie.imdbId);
-        await fs.writeFile("./seriesAdded.csv", allreadyAdded.join("\n"));
+        //await fs.writeFile("./seriesAdded.csv", allreadyAdded.join("\n"));
       }
     } catch (error) {
       console.log(error);

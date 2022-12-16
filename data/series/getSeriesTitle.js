@@ -87,7 +87,6 @@ let browser = "";
     } catch (error) {
       console.log(error);
       return;
-      //seriesList = [];
     }
     console.log(resultData.length);
     console.log(seriesList.length);

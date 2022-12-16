@@ -1,6 +1,6 @@
 // add run time to the series
 
-var seriesInfo = "./seriesInfo.json";
+var seriesInfo = "../datasets/series/seriesInfo.json";
 var datasets = "../datasets/title.csv";
 var fs = require("fs");
 function getRunTime() {
@@ -39,7 +39,8 @@ function getRunTime() {
       if (item.seasons) {
         item.seasons.forEach((season) => {
           if (season.episodes) {
-            episodes.forEach((episode) => {
+            //console.log(JSON.stringify(season.episodes));
+            season.episodes.forEach((episode) => {
               // find the episode in the  data
               var found = data.find((item) => {
                 return item.tconst === episode.imdbId;
@@ -61,7 +62,6 @@ function getRunTime() {
      * 3. find the average of each series and add it to the series run time
      */
     // this code sucks but i'm to dumb to fix it, so i'm leaving it here
-    // maybe i should ask to chat gpt to optimize it but i'm to lazy
     if (item.seasons) {
       item.seasons.forEach((season) => {
         if (season.episodes) {
@@ -74,6 +74,7 @@ function getRunTime() {
             }
           });
           season.runTime = Math.round(total / count);
+          console.log("season run time", season.runTime);
         }
       });
     }
@@ -89,7 +90,11 @@ function getRunTime() {
         }
       });
       item.runTime = Math.round(total / count);
+      console.log("series run time", item.runTime);
     }
+
+    // write the series info to the file
+    fs.writeFileSync(seriesInfo, JSON.stringify(series, null, 2));
   });
 }
 

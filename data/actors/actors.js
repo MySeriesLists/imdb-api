@@ -10,7 +10,10 @@ const currentTime = new Date().getTime();
 async function getActors() {
     try {
         var allreadyAdded = [];
-        var actorsAddedCSV = fs.readFileSync("actorsAdded.csv", "utf8");
+        var actorsAddedCSV = fs.readFileSync(
+            "../datasets/actors/actorsAdded.csv",
+            "utf8"
+        );
         var actorsAdded = actorsAddedCSV.split("\n");
         for (var i = 0; i < actorsAdded.length; i++) {
             allreadyAdded.push(actorsAdded[i]);
@@ -19,7 +22,10 @@ async function getActors() {
         // remove duplicates
         allreadyAdded = [...new Set(allreadyAdded)];
 
-        const actorsList = fs.readFileSync("./actorsList.json", "utf8");
+        const actorsList = fs.readFileSync(
+            "../datasets/actors/actorsList.json",
+            "utf8"
+        );
         try {
             var actors = JSON.parse(actorsList);
         } catch (e) {
@@ -37,8 +43,14 @@ async function getActors() {
                     result.push(data);
                     allreadyAdded.push(actorId);
                     //console.log(data);
-                    fs.appendFileSync("actorsAdded.csv", actorId + "\n");
-                    fs.writeFileSync("./actorsInfo.json", JSON.stringify(result));
+                    fs.appendFileSync(
+                        "../datasets/actors/actorsAdded.csv",
+                        actorId + "\n"
+                    );
+                    fs.writeFileSync(
+                        "../datasets/actors/actorsInfo.json",
+                        JSON.stringify(result)
+                    );
                 }
             }
         }

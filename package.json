@@ -23,6 +23,7 @@
     "googleapis": "^109.0.1",
     "hono": "^1.4.1",
     "html-entities": "^2.3.3",
+    "jszip": "^3.10.1",
     "node-cron": "^3.0.2",
     "puppeteer": "^19.4.0"
   },

@@ -1,7 +1,7 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
 const path = require("path");
-const file = path.join(__dirname, "moviesList.json");
+const file = path.join(__dirname, "../datasets/movies/moviesList.json");
 
 (async () => {
     try {
@@ -16,7 +16,8 @@ const file = path.join(__dirname, "moviesList.json");
             data = [];
         }
         let i = 0;
-        while (i <= 50) {
+        while (i <= 9950) {
+            console.log(i);
             await page.goto(
                 `https://www.imdb.com/search/title/?title_type=feature&num_votes=10000,&sort=user_rating,desc&start=${i}&ref_=adv_nxt`
             );

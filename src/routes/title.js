@@ -15,7 +15,7 @@ title.use("/:id", async (c, next) => {
             c.header("x-cache", "HIT");
             return c.json(JSON.parse(get));
         }
-    } catch (_) {}
+    } catch (_) { }
     await next();
     c.header("x-cache", "MISS");
 });
@@ -25,9 +25,7 @@ title.get("/:id", async (c) => {
 
     try {
         let parser = new DomParser();
-        let rawHtml = await apiRequestRawHtml(
-            `https://www.imdb.com/title/${id}`
-        );
+        let rawHtml = await apiRequestRawHtml(`https://www.imdb.com/title/${id}`);
 
         let dom = parser.parseFromString(rawHtml);
 
@@ -38,10 +36,7 @@ title.get("/:id", async (c) => {
         schema = JSON.parse(schema.innerHTML);
 
         // id
-        response.id = id;
-
-        // imdb link
-        response.imdb = `https://www.imdb.com/title/${id}`;
+        response.imdbId = id;
 
         // content type
         response.contentType = schema["@type"];
@@ -52,7 +47,7 @@ title.get("/:id", async (c) => {
                 level: "html5",
             });
         }
-        
+
         // title
         // response.title = getNode(dom, "h1", "hero-title-block__title").innerHTML;
         response.title = entityDecoder(schema.name, { level: "html5" });
@@ -70,7 +65,7 @@ title.get("/:id", async (c) => {
                 count: schema.aggregateRating.ratingCount,
                 star: schema.aggregateRating.ratingValue,
             };
-        } catch (_) {}
+        } catch (_) { }
         // genres
         try {
             response.genre = schema.genre.map((e) =>
@@ -116,14 +111,14 @@ title.get("/:id", async (c) => {
                 let seasons = await seriesFetcher(id);
                 response.seasons = seasons;
             }
-        } catch (error) {}
+        } catch (error) { }
 
         if (!config.cacheDisabled) {
             try {
                 await CACHE.put(id, JSON.stringify(response), {
                     expirationTtl: 86400,
                 });
-            } catch (_) {}
+            } catch (_) { }
         }
 
         return c.json(response);

@@ -1,6 +1,8 @@
 const fs = require("fs").promises;
 const BASE_URL = "http://localhost:3000/title/";
 const axios = require("axios");
+const movieListPath = "../datasets/movies/moviesList.json";
+const movieInfoPath = "../datasets/movies/moviesInfo.json";
 
 async function wait(time) {
     return new Promise((resolve) => {
@@ -10,46 +12,50 @@ async function wait(time) {
 
 async function getMovies() {
     var allreadyAdded = [];
-    const addedMovies = await fs.readFile("./moviesAdded.csv", "utf8");
-    addedMovies.split("\n").forEach((element) => {
-        allreadyAdded.push(element);
-    });
-    allreadyAdded === undefined
-        ? (allreadyAdded = [])
-        : (allreadyAdded = allreadyAdded);
-    const moviesList = (await fs.readFile("./moviesList.json", "utf8")) || [];
+    const moviesList = (await fs.readFile(movieListPath, "utf8")) || [];
     const movies = JSON.parse(moviesList);
 
+    //verify if moviesInfo exists (if not, create it with [] value)
+    try {
+        await fs.access(movieInfoPath);
+    } catch (err) {
+        await fs.writeFile(movieInfoPath, "[]");
+    }
+
+    var moviesInfo = await fs.readFile(movieInfoPath, "utf8");
+    moviesInfo = JSON.parse(moviesInfo);
+
+    allreadyAdded = moviesInfo.map((movie) => movie.imdbId);
+
     let count = 0;
+
+    console.log("Movies length: " + movies.length);
+    console.log("Movies already added: " + allreadyAdded.length);
+
     for (const movie of movies) {
+        count++;
         if (allreadyAdded.includes(movie.imdbId)) {
+            console.log("Movie already added: " + movie.title);
             continue;
         }
-        count++;
         const url = BASE_URL + movie.imdbId;
 
         try {
-            var moviesInfo = await fs.readFile("./moviesInfo.json", "utf8");
-
-            moviesInfo.length < 2
-                ? (moviesInfo = [])
-                : (moviesInfo = JSON.parse(moviesInfo));
+            //var moviesInfo = await fs.readFile("./moviesInfo.json", "utf8");
             const { data } = await axios.get(url);
             moviesInfo.push(data);
-            await fs.writeFile("./moviesInfo.json", JSON.stringify(moviesInfo));
+            await fs.writeFile(movieInfoPath, JSON.stringify(moviesInfo));
 
             // add the serie to the list of added series and write it to the csv file
 
             if (!allreadyAdded.includes(movie.imdbId)) {
                 allreadyAdded.push(movie.imdbId);
-                await fs.writeFile("./moviesAdded.csv", allreadyAdded.join("\n"));
+                //await fs.writeFile("./moviesAdded.csv", allreadyAdded.join("\n"));
             }
         } catch (error) {
             console.log(error);
             await wait(10 * 1000);
         }
-
-        count++;
         count % 10 === 0 && console.log(count);
     }
 
@@ -57,7 +63,7 @@ async function getMovies() {
     const moviesInfoJson = JSON.parse(moviesInfo);
     const imdbIds = [];
     moviesInfoJson.forEach((movie) => {
-        imdbIds.push(movie.id);
+        imdbIds.push(movie.imdbId);
     });
     const uniqueImdbIds = [...new Set(imdbIds)];
     if (uniqueImdbIds.length !== imdbIds.length) {

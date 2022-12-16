@@ -1,4 +1,3 @@
-
 <h1 align="center">
   <br>
   <a href="https://github.com/meteor314/series"><img src="https://raw.githubusercontent.com/meteor314/series/master/imdb-api/README/logo.png" alt="Markdownify" width="51"></a>
@@ -33,9 +32,9 @@
 
 ## Key Features
 
-* <a href="https://github.com/meteor314/series/tree/master/imdb-api/data/movies" >more than 10 000 films </a>
-* <a href="https://github.com/meteor314/series/tree/master/imdb-api/data/series"> more than 10 000 series </a>
-* <a href="https://github.com/meteor314/series/tree/master/imdb-api/data/actors">more than 100 000 actors </a>
+- <a href="https://github.com/meteor314/series/tree/master/imdb-api/data/movies" >more than 10 000 films </a>
+- <a href="https://github.com/meteor314/series/tree/master/imdb-api/data/series"> more than 10 000 series </a>
+- <a href="https://github.com/meteor314/series/tree/master/imdb-api/data/actors">more than 100 000 actors </a>
 
 ## How To Use
 
@@ -58,9 +57,10 @@ $ node <file>.js
 > **Note**
 > If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
 
-
 ## Configuration
+
 You also need to create .env file, here is the structure of the project :
+
 ```sh.
 ├── <file>.js
 ├── .env
@@ -70,14 +70,24 @@ You also need to create .env file, here is the structure of the project :
 ├── README
 └── README.md
 ```
-After that you can write your email and password on .env file :
+
+You also need to create key api from google and enable Yt v3 api
+
+> https://developers.google.com/youtube/v3
+
 ```sh
 # open your favorite editor
 vim .env
 # content of .env file
-USER_EMAIL=<Your email >
-USER_PASSWORD=<Your password>
-MONGODB_URI=<Your mongodb uri> #optional
+# I Created 5 keys but you don't need all of this.
+
+GOOGLE_API_KEY=-** # to keep
+YOUTUBE_API_KEY2=** #optional
+YOUTUBE_API_KEY3=** #optional
+YOUTUBE_API_KEY4=** #optional
+YOUTUBE_API_KEY6=** #optional
+YOUTUBE_API_KEY5=** #optional
+
 ```
 
 > **Note**
@@ -90,9 +100,7 @@ MONGODB_URI=<Your mongodb uri> #optional
 
 > **Note**²
 > MongoDB is optional, you can use the csv or json file.
-> Please uncomment mongodb connection in *.js if needed
-
-
+> Please uncomment mongodb connection in \*.js if needed
 
 ## Support
 
@@ -105,12 +113,10 @@ This software uses the following open source packages:
 - [Puppeteer](https://pptr.dev/)
 - [Node.js](https://nodejs.org/)
 
-
 ## Related
-* <a href ="https://www.kaggle.com/datasets/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews"> IMDB Dataset of 50K Movie Reviews </a>
-* <a href ="https://www.kaggle.com/datasets/harshitshankhdhar/imdb-dataset-of-top-1000-movies-and-tv-shows"> IMDB Movies Dataset </a>
 
-
+- <a href ="https://www.kaggle.com/datasets/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews"> IMDB Dataset of 50K Movie Reviews </a>
+- <a href ="https://www.kaggle.com/datasets/harshitshankhdhar/imdb-dataset-of-top-1000-movies-and-tv-shows"> IMDB Movies Dataset </a>
 
 ## You may also like...
 
@@ -121,18 +127,17 @@ This software uses the following open source packages:
 
 <a href="#" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
-<p>Or</p> 
+<p>Or</p>
 
 <a href="#">
 	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
 </a>
 
 ## License
+
 MIT License
 
 ---
 
 > GitHub [@meteor314](https://github.com/meteor314) &nbsp;&middot;&nbsp;
 > CodePen [@meteor314](https://codepen.io/meteor314)
-
-

@@ -6,7 +6,7 @@
  */
 const path = require("path");
 const fs = require("fs");
-const file = path.join(__dirname, "./moviesList.json");
+const file = path.join(__dirname, "../datasets/movies/moviesList.json");
 const { config } = require("dotenv");
 const { google } = require("googleapis");
 config({
@@ -14,7 +14,6 @@ config({
 });
 
 var data = JSON.parse(fs.readFileSync(file, "utf8"));
-var apiKey = null;
 async function searchVideos(query, youtube) {
   // get only video id
   try {
@@ -45,25 +44,25 @@ async function searchVideos(query, youtube) {
 async function addTrailerId() {
   try {
     for (let i = 0; i < data.length; i++) {
+      var apiKey = null;
       // due to the limit of youtube api, we can only search 100 times per day
       // so we need to wait for 24 hours
-      // that's why i use 3 youtube api keys
-      let apiKeys = [
-        process.env.YOUTUBE_API_KEY1,
+      // that's why i use 5 youtube api keys
+      var apiKeys = [
+        process.env.GOOGLE_API_KEY,
         process.env.YOUTUBE_API_KEY2,
         process.env.YOUTUBE_API_KEY3,
         process.env.YOUTUBE_API_KEY4,
         process.env.YOUTUBE_API_KEY5,
         process.env.YOUTUBE_API_KEY6,
       ];
-      for (let k = 1; k <= apiKeys.length; k++) {
-        i % k === 0 ? (apiKey = apiKeys[k]) : (apiKey = apiKeys[5]);
-        if (apiKey == undefined) apiKey = apiKeys[3];
-      }
 
-      //if (i % 100 === 0 && i !== 0) await sleep(1000 * 60);
+      var index = i % apiKeys.length;
+      apiKeys[index] == undefined
+        ? (apiKey = apiKeys[0])
+        : (apiKey = apiKeys[index]);
 
-      var youtube = google.youtube({
+      const youtube = google.youtube({
         version: "v3",
         auth: apiKey,
       });
@@ -93,7 +92,7 @@ async function addTrailerId() {
       }
     }
   } catch (error) {
-    //  console.log(error);
+    console.log(error.message);
   }
 }
 
