@@ -81,6 +81,9 @@ vim .env
 # content of .env file
 # I Created 5 keys but you don't need all of this.
 
+#########################
+#  FOR YOOUTUBE API KEY #
+#########################
 GOOGLE_API_KEY=-** # to keep
 YOUTUBE_API_KEY2=** #optional
 YOUTUBE_API_KEY3=** #optional
@@ -88,6 +91,21 @@ YOUTUBE_API_KEY4=** #optional
 YOUTUBE_API_KEY6=** #optional
 YOUTUBE_API_KEY5=** #optional
 
+
+############
+# MODE ENV #
+############
+MODE_ENV=dev # or production
+
+
+
+##########################
+# FOR SENDING EMAIL ######
+##########################
+
+USER_EMAIL=************
+USER_PASSWORD=*********
+EMAIL_SERVICE=gmail # replace
 ```
 
 > **Note**

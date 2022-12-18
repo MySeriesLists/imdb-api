@@ -23,7 +23,10 @@ function main() {
     const file = files.next();
     const name = file.getName();
     if (name === "dataset.zip") {
+      // create a folder with the date as name in the folder and move the file to the folder
+      const newFolder = folder.createFolder(`dataset_${date}`);
       file.setName(`dataset_${date}.zip`);
+      file.moveTo(newFolder);
     }
   }
 }

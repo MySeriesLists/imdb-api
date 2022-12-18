@@ -7,6 +7,8 @@
 const path = require("path");
 const fs = require("fs");
 const file = path.join(__dirname, "../datasets/movies/moviesList.json");
+const moviesInfoPath = "../datasets/movies/moviesInfo.json";
+var moviesInfo = JSON.parse(fs.readFileSync(moviesInfoPath, "utf8"));
 const { config } = require("dotenv");
 const { google } = require("googleapis");
 config({
@@ -37,7 +39,7 @@ async function searchVideos(query, youtube) {
       id: data.items[0].id.videoId,
     };
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 }
 
@@ -84,7 +86,11 @@ async function addTrailerId() {
             data[movieIndex] = movie;
           }
           // write to file
-          fs.writeFileSync(file, JSON.stringify(data, null, 2));
+          try {
+            fs.writeFileSync(file, JSON.stringify(data, null, 2), "utf8");
+          } catch (error) {
+            console.log(error);
+          }
           console.log("missing index " + i);
         }
       } catch (error) {
@@ -93,6 +99,26 @@ async function addTrailerId() {
     }
   } catch (error) {
     console.log(error.message);
+  }
+
+  // add data trailer to moviesInfo file
+  for (let i = 0; i < data.length; i++) {
+    const imdbId = data[i].imdbId;
+    const movieIndex = moviesInfo.findIndex((m) => m.imdbId === imdbId);
+    if (movieIndex > -1) {
+      if (data[i].trailerYtId && !moviesInfo[movieIndex].trailerYtId) {
+        moviesInfo[movieIndex].trailerYtId = data[i].trailerYtId;
+      }
+    }
+  }
+  try {
+    fs.writeFileSync(
+      path.join(__dirname, moviesInfoPath),
+      JSON.stringify(moviesInfo, null, 2)
+    );
+    console.log("done!");
+  } catch (error) {
+    console.log(error);
   }
 }
 

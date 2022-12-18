@@ -6,7 +6,7 @@ const file = path.join(__dirname, "../datasets/movies/moviesList.json");
 (async () => {
     try {
         const currentDate = new Date().getTime();
-        const browser = await puppeteer.launch({ headless: true });
+        const browser = await puppeteer.launch({ headless: false });
         const page = await browser.newPage();
         //await page.goto('https://www.imdb.com/search/title/?title_type=tv_series&start=0&view=advanced');
         try {

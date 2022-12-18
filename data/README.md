@@ -1,25 +1,25 @@
 # How scrape data from imdb
 
-For this clone the project 
+For this clone the project
 
 To clone and run this application, you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
 
 ```sh
 git clone git@github.com:MySeriesLists/imdb-api.git
 cd imdb-api/
-npm i 
+npm i
 npm run dev
 ```
 
+Please download **datasets.zip** file form [google drive](https://drive.google.com/drive/folders/1rL6Q7tMa0aXzJXvP9OeDWNEG4Fz7yCFc?usp=share_link) extract them and put it in:
 
-
-Please download **datasets.zip**  file form [google drive](https://drive.google.com/drive/folders/1rL6Q7tMa0aXzJXvP9OeDWNEG4Fz7yCFc?usp=share_link) extract them and put it in: 
 ```bash
 imdb-api/data/datasets/
 ```
 
-datasets directory should something like this : 
-```bash 
+datasets directory should something like this :
+
+```bash
 ├── datasets
 │   ├── actors
 │   │   ├── actorsAdded.csv
@@ -37,26 +37,34 @@ datasets directory should something like this :
 │   │   └── seriesList.json
 │   └── title.csv
 ```
-## Start scrapping 
+
+## Start scrapping
 
 ```bash
-  cd data/  # go to data
+  cd data/datasets  # go to data
   chmod +x dataset.Sh
   ./dataset.sh
 ```
 
-You can try if everything is working fine : 
-For example 
+You also need to run runTime.js to get run time for series
+
 ```bash
-cd movies/ && node movies.js
+cd ../series/
+node runTime.js
+```
+
+You can try if everything is working fine :
+For example
+
+```bash
+cd ../movies/ && node movies.js
 ```
 
 If everything is working fine then, just launch crontab
 
+You can run
 
-You can run 
 ```sh
-node cron.js # or  
+node cron.js # or
 imdb-api/data/cron.sh
 ```
-

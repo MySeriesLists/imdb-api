@@ -9,6 +9,9 @@ const fs = require("fs");
 const file = path.join(__dirname, "../datasets/series/seriesList.json");
 const { config } = require("dotenv");
 const { google } = require("googleapis");
+const seriesInfoPath = "../datasets/series/seriesInfo.json";
+var seriesInfo = require(seriesInfoPath);
+
 config({
   path: "./../../.env",
 });
@@ -37,7 +40,7 @@ async function searchVideos(query, youtube) {
       id: data.items[0].id.videoId,
     };
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 }
 
@@ -84,7 +87,11 @@ async function addTrailerId() {
             data[serieIndex] = serie;
           }
           // write to file
-          fs.writeFileSync(file, JSON.stringify(data, null, 2));
+          try {
+            fs.writeFileSync(file, JSON.stringify(data, null, 2));
+          } catch (error) {
+            console.log(error);
+          }
           console.log("missing index " + i);
         }
       } catch (error) {
@@ -93,6 +100,25 @@ async function addTrailerId() {
     }
   } catch (error) {
     console.log("error occured : " + error.message);
+  }
+
+  for (let i = 0; i < data.length; i++) {
+    const imdbId = data[i].imdbId;
+    const serieIndex = seriesInfo.findIndex((m) => m.imdbId === imdbId);
+    if (serieIndex > -1) {
+      if (data[i].trailerYtId && !seriesInfo[serieIndex].trailerYtId) {
+        seriesInfo[serieIndex].trailerYtId = data[i].trailerYtId;
+      }
+    }
+  }
+  try {
+    fs.writeFileSync(
+      path.join(__dirname, seriesInfoPath),
+      JSON.stringify(seriesInfo, null, 2)
+    );
+    console.log("done!");
+  } catch (error) {
+    console.log(error);
   }
 }
 

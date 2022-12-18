@@ -1,3 +1,5 @@
+# this file is acutal folderPath 
+folderPath=$(dirname $(readlink -f $0))
 check_dependencies () {
 	# checks if dependencies are present
 	for dep; do
@@ -51,8 +53,5 @@ fi
 
 zip -r dataset.zip datasets
 
-echo "Done!"
-
-ehco "Launching nodejs server for the dataset run time"
-node ../series/runTime.js
-
+echo "Launching nodejs server for the dataset run time"
+cd $folderPath/../series/ &&  node runTime.js

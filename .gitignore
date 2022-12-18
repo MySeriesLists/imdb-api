@@ -20,6 +20,7 @@ actorsInfo.json
 *.env
 *.tsv
 *.csv
+appsscript.json
 .clasp.json
 token.json
 title.csv

@@ -1,6 +1,11 @@
 const axios = require("axios");
 const fs = require("fs");
 const BASE_URL = "http://127.0.0.1:3000/actor/";
+const dotenv = require("dotenv");
+const sendEmail = require("../sendEmail.js");
+dotenv.config({ path: "../../.env" });
+
+var errorCounter = 0;
 async function wait(time) {
     return new Promise((resolve) => {
         setTimeout(resolve, time);
@@ -54,14 +59,18 @@ async function getActors() {
                 }
             }
         }
-    } catch (e) {
-        console.log(e);
+    } catch (error) {
+        console.log(error);
+        errorCounter++;
+        if (errorCounter > 7) {
+            console.log("Too many errors, exiting");
+            process.exit(1);
+        }
+
         await wait(1000);
-        getActors();
+        await sendEmail("actors.js", error);
+        await getActors();
     }
 }
 
-//getActors();
-
-// export getActors fuction for use in cron job
-module.exports = getActors;
+getActors();
